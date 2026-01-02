@@ -14,7 +14,7 @@ Final project for the Technion's EE Deep Learning course (046217)
 ---
 
 ## 📖 Introduction
-This project implements a sophisticated colorization pipeline using a **U-Net** architecture with a **ResNet-50** backbone, trained on the **Food-101** dataset. By leveraging the CIELAB color space, the model learns to predict the $a$ and $b$ (color) channels given the $L$ (luminance) channel.
+This project implements a colorization pipeline using a **U-Net** architecture with a **ResNet-50** backbone, trained on the **Food-101** dataset. By leveraging the CIELAB color space, the model learns to predict the $a$ and $b$ (color) channels given the $L$ (luminance) channel.
 
 ### 🎯 Project Highlights
 * **High-Fidelity Colorization**: Uses annealed mean decoding ($T=0.42$) for vibrant results.
