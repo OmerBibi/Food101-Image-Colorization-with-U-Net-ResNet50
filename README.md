@@ -87,10 +87,16 @@ model.eval()
 Below is a "consistency filmstrip" showing the model's evolution during training:
 <img width="560" height="1120" alt="consistency_filmstrip_10_epoch" src="https://github.com/user-attachments/assets/0bb880d1-4ab6-44ee-a2a2-efe2584f6a4c" />
 
-And few more examples from the test set:
+### And a few more examples from the test set:
 
-<img width="450" height="1797" alt="eval_predictions_1" src="https://github.com/user-attachments/assets/7afb2432-cf7f-4c82-8b96-8d093ed2bf5d" />
-<img width="450" height="1797" alt="eval_predictions_2" src="https://github.com/user-attachments/assets/54b3ece4-7d31-47ef-916f-5ad68c6bd6dc" />
+<p align="center">
+  <table>
+    <tr>
+      <td><img src="https://github.com/user-attachments/assets/7afb2432-cf7f-4c82-8b96-8d093ed2bf5d" width="450" alt="eval_predictions_1"></td>
+      <td><img src="https://github.com/user-attachments/assets/54b3ece4-7d31-47ef-916f-5ad68c6bd6dc" width="450" alt="eval_predictions_2"></td>
+    </tr>
+  </table>
+</p>
 
 
 ---
