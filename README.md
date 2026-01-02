@@ -4,10 +4,10 @@
 <p align="center"> 
 <img src="https://github.com/user-attachments/assets/a82e6132-8949-4641-8513-6786c188b3e2" alt="Colorized Food Commercial" width="600" /> </p>
 
+Final project for the Technion's EE Deep Learning course (046217)
 <p align="center"> 
   
-Final project for the Technion's EE Deep Learning course (046217)
-  
+
 ---
 
 ## 📖 Introduction
