@@ -27,10 +27,10 @@ The core of this project is a **Quantized Color Class Prediction** model. Instea
 | **Encoder** | Modified **ResNet-50** (accepting 1-channel grayscale input). |
 | **Decoder** | Symmetric upsampling path with **Skip Connections** to preserve edges. |
 | **Inference** | Annealed Mean decoding to balance color saturation and realism. |
-
-<img width="5584" height="1500" alt="graphviz" src="https://github.com/user-attachments/assets/5537e0f5-9d85-430a-b4d5-506612abdb3a" />
-
-
+<p align="center">
+<img width="444" height="608" alt="graphviz (1)" src="https://github.com/user-attachments/assets/a8545a93-3179-4076-b949-c9a55e5f22d0" />
+<p align="center">
+  
 ---
 
 ## 🖼️ Results Gallery
