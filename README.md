@@ -58,9 +58,19 @@ We monitored the model's progress throughout training using a "consistency films
 ---
 
 ## 💻 Setup & Usage
-1. **Clone the repo:** `git clone https://github.com/OmerBibi/Food101-Image-Colorization-with-U-Net-ResNet50`
-2. **Install requirements:** `pip install torch torchvision numpy scikit-image matplotlib scikit-learn`
-3. **Weights:** Ensure `ab_weights_k259.npy` and `ab_centers_k259.npy` are in the `artifacts/` folder.
+
+1. **Clone the repo:**
+   ```bash
+   git clone https://github.com/OmerBibi/Food101-Image-Colorization-with-U-Net-ResNet50`
+    ```
+2. **Install requirements:**
+   ```bash
+   pip install torch torchvision numpy scikit-image matplotlib scikit-learn
+   ```
+3. **Weights:** Ensure `ab_weights_k259.npy`, `ab_centers_k259.npy` and `best_ep009_loss1.4589.pt` are in the `artifacts/` folder.
+4.  Run the first cell of `data_and_preprocess.ipynb` to download the dataset
+5.  Use `visualization.ipynb` for visualization and inference
+6.  If you want to train/change pre-processing, make sure to check `data_and_preprocess.ipynb` and `training_and_eval_v2.py`
 
 ---
 *Inspired by the "Colorful Image Colorization" paper (Zhang et al.) and built for the Food-101 Challenge.*
