@@ -1,0 +1,13 @@
+{
+  "dataset": "Food101",
+  "K": 259,
+  "ab_min": -110.0,
+  "ab_max": 110.0,
+  "grid_step": 10.0,
+  "prune_images": 30000,
+  "resize_policy": "short_side=256, center_crop=224",
+  "nearest_grid": true,
+  "weighted_kmeans": true,
+  "sigma_soft": 5.0,
+  "seed": 42
+}
