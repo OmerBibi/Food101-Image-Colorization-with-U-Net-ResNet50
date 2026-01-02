@@ -4,6 +4,10 @@
 
 Transform black-and-white memories into vibrant colors using deep learning. This project implements a sophisticated colorization pipeline using a **U-Net** architecture with a **ResNet-50** encoder, trained on the Food-101 dataset.
 
+<p align="center"> <img src="https://github.com/user-attachments/assets/a82e6132-8949-4641-8513-6786c188b3e2" alt="Colorized Food Commercial" width="600" /> </p>
+
+<p align="center"> 
+
 ---
 
 ## 🚀 Key Features
