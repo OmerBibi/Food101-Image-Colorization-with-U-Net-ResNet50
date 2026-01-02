@@ -1,4 +1,4 @@
-# 🍔 AI Food Colorizer: Grayscale to Vibrant Color
+# 🍔 Food Colorization using Deep Networks: Grayscale to Vibrant Color
 ### *Advanced Deep Learning Colorization using U-Net & ResNet-50*
 
 <p align="center"> <img src="https://github.com/user-attachments/assets/a82e6132-8949-4641-8513-6786c188b3e2" alt="Colorized Food Commercial" width="600" /> </p>
