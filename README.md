@@ -79,7 +79,7 @@ We monitored the model's progress throughout training using a "consistency films
    pip install torch torchvision numpy scikit-image matplotlib scikit-learn
    ```
 3. **Weights:** Ensure `ab_weights_k259.npy`, `ab_centers_k259.npy` and `best_ep009_loss1.4589.pt` are in the `artifacts/` folder.
-4.  Run the first cell of `data_and_preprocess.ipynb` to download the dataset
+4.  Run the first cells of `data_and_preprocess.ipynb` to download the dataset
 5.  Use `visualization.ipynb` for visualization and inference
 6.  If you want to train/change pre-processing, make sure to check `data_and_preprocess.ipynb` and `training_and_eval_v2.py`
 
