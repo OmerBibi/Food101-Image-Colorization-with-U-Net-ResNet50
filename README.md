@@ -28,7 +28,7 @@ The core of this project is a **Quantized Color Class Prediction** model. Instea
 | **Decoder** | Symmetric upsampling path with **Skip Connections** to preserve edges. |
 | **Inference** | Annealed Mean decoding to balance color saturation and realism. |
 
-<img width="5584" height="882" alt="graphviz" src="https://github.com/user-attachments/assets/5537e0f5-9d85-430a-b4d5-506612abdb3a" />
+<img width="5584" height="1500" alt="graphviz" src="https://github.com/user-attachments/assets/5537e0f5-9d85-430a-b4d5-506612abdb3a" />
 
 
 ---
