@@ -1,8 +1,5 @@
-
-
-# 🎨 Deep Image Colorization with U-Net & ResNet-50
-
-Transform black-and-white memories into vibrant colors using deep learning. This project implements a sophisticated colorization pipeline using a **U-Net** architecture with a **ResNet-50** encoder, trained on the Food-101 dataset.
+# 🍔 AI Food Colorizer: Grayscale to Vibrant Color
+### *Advanced Deep Learning Colorization using U-Net & ResNet-50*
 
 <p align="center"> <img src="https://github.com/user-attachments/assets/a82e6132-8949-4641-8513-6786c188b3e2" alt="Colorized Food Commercial" width="600" /> </p>
 
@@ -10,108 +7,65 @@ Transform black-and-white memories into vibrant colors using deep learning. This
 
 ---
 
-## 🚀 Key Features
+## 📖 Introduction
+This project implements a sophisticated colorization pipeline using a **U-Net** architecture with a **ResNet-50** backbone, trained on the **Food-101** dataset. By leveraging the CIELAB color space, the model learns to predict the $a$ and $b$ (color) channels given the $L$ (lightness) channel.
 
-* **U-Net Architecture**: Features skip connections to preserve spatial details from the input grayscale image.
-* **ResNet-50 Backbone**: Leverages ImageNet pre-trained weights for robust feature extraction.
-* **CIELAB Color Space**: Predicted in the  space, where the model learns to predict the  (green-red) and  (blue-yellow) channels given the  (lightness) channel.
-* **Probabilistic Distribution**: Instead of simple regression, the model predicts a probability distribution over quantized color bins (K=259) to handle multimodal color uncertainty.
-* **Annealed Mean Decoding**: Uses a temperature-parameterized softmax () to produce vibrant yet natural color outputs.
-
----
-
-## 🛠️ Architecture Detail
-
-The model consists of an encoder (downsampling) and a decoder (upsampling):
-
-| Component | Description |
-| --- | --- |
-| **Encoder** | Modified ResNet-50. The first layer is adapted to accept 1-channel grayscale input. |
-| **Bridge** | Two `ConvGNReLU` layers (GroupNorm + ReLU) with 1024/2048 channels. |
-| **Decoder** | Symmetric up-blocks using bilinear interpolation and skip connections from the encoder. |
-| **Head** |  Convolution mapping 64 features to 259 color bin classes. |
+### 🎯 Project Highlights
+* **High-Fidelity Colorization**: Uses annealed mean decoding ($T=0.42$) for vibrant results.
+* **Video Capability**: Successfully processes video sequences frame-by-frame.
+* **Smart Architecture**: Combines pre-trained ResNet-50 features with U-Net skip connections.
 
 ---
 
-## 📊 Preprocessing & Training
+## 🛠️ Model Architecture & Methodology
 
-The pipeline involves sophisticated data preparation:
+The core of this project is a **Quantized Color Class Prediction** model. Instead of predicting a single color value (which leads to "muddy" gray results), the model predicts a probability distribution over 259 discrete color bins.
 
-1. **Quantization**: Color space is divided into 259 discrete bins based on the distribution of the Food-101 dataset.
-2. **Class Rebalancing**: Uses rare-color weighting to prevent the model from always predicting desaturated "safe" colors (like gray or brown).
-3. **Soft Labels**: Training targets are generated using Gaussian smoothing () over the 5 nearest color neighbors.
-
----
-
-## 💻 Usage
-
-### 1. Prerequisites
-
-```bash
-pip install torch torchvision numpy scikit-image matplotlib pillow scikit-learn
-
-```
-### 2. Training
-
-Run the data_and_preproces notebook which Handles dataset loading, color bin quantization, and class weight calculation:
-```bash
-data_and_preprocess.ipynb
-
-```
-
-### 3. Training
-
-Run the training script which includes validation and real-time visualization:
-
-```bash
-python training_and_eval_v2.py
-
-```
-
-### 4. Inference & Visualization
-
-Use the `visualization.ipynb` notebook to load a checkpoint and colorize custom images.
-
-```python
-# Model initialization
-model = UNetResNet50(num_classes=259)
-model.load_state_dict(torch.load('best_model.pt'))
-model.eval()
-
-```
+| Stage | Description |
+| :--- | :--- |
+| **Preprocessing** | Lab color space conversion, color quantization, and rare-class rebalancing. |
+| **Encoder** | Modified **ResNet-50** (accepting 1-channel grayscale input). |
+| **Decoder** | Symmetric upsampling path with **Skip Connections** to preserve edges. |
+| **Inference** | Annealed Mean decoding to balance color saturation and realism. |
 
 ---
 
-## 🖼️ Results
+## 🖼️ Results Gallery
 
-Below is a "consistency filmstrip" showing the model's evolution during training:
-<img width="560" height="1120" alt="consistency_filmstrip_10_epoch" src="https://github.com/user-attachments/assets/0bb880d1-4ab6-44ee-a2a2-efe2584f6a4c" />
-
-### And a few more examples from the test set:
+### Side-by-Side Test Comparisons
+Below are several examples from the test set showing the input grayscale, our model's prediction, and the ground truth.
 
 <p align="center">
   <table>
     <tr>
-      <td><img src="https://github.com/user-attachments/assets/7afb2432-cf7f-4c82-8b96-8d093ed2bf5d" width="450" alt="eval_predictions_1"></td>
-      <td><img src="https://github.com/user-attachments/assets/54b3ece4-7d31-47ef-916f-5ad68c6bd6dc" width="450" alt="eval_predictions_2"></td>
+      <td><img src="https://github.com/user-attachments/assets/7afb2432-cf7f-4c82-8b96-8d093ed2bf5d" width="450" alt="Evaluation 1"></td>
+      <td><img src="https://github.com/user-attachments/assets/54b3ece4-7d31-47ef-916f-5ad68c6bd6dc" width="450" alt="Evaluation 2"></td>
     </tr>
   </table>
 </p>
 
+### Training Evolution
+We monitored the model's progress throughout training using a "consistency filmstrip":
+<img width="560" height="1120" alt="consistency_filmstrip_10_epoch" src="https://github.com/user-attachments/assets/0bb880d1-4ab6-44ee-a2a2-efe2584f6a4c" />
+
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/6681356d-07e7-49ab-b626-e1e8a7f4b023" width="600" alt="Consistency Strip" />
+</p>
 
 ---
 
-## 📂 Project Structure
-
-* `data_and_preprocess.ipynb`: Handles dataset loading, color bin quantization, and class weight calculation.
-* `training_and_eval_v2.py`: Core training loop featuring weighted loss and validation tracking.
-* `visualization.ipynb`: Tools for model evaluation, ranking validation results, and generating side-by-side comparisons.
-
----
-
-## 📜 References
-
-* Dataset: [Food-101](https://www.google.com/search?q=https://www.vision.ee.ethz.ch/datasets_extra/food-101/).
-* Inspired by: *Colorful Image Colorization* (Zhang et al.).
+## 📂 Repository Contents
+* `data_and_preprocess.ipynb`: Data preparation, color binning, and weight calculation.
+* `training_and_eval_v2.py`: The main training script with validation logic.
+* `visualization.ipynb`: Inference tools for images, videos, and entropy visualization.
 
 ---
+
+## 💻 Setup & Usage
+1. **Clone the repo:** `git clone https://github.com/OmerBibi/Food101-Image-Colorization-with-U-Net-ResNet50`
+2. **Install requirements:** `pip install torch torchvision numpy scikit-image matplotlib scikit-learn`
+3. **Weights:** Ensure `ab_weights_k259.npy` and `ab_centers_k259.npy` are in the `artifacts/` folder.
+
+---
+*Inspired by the "Colorful Image Colorization" paper (Zhang et al.) and built for the Food-101 Challenge.*
