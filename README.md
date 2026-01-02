@@ -1,7 +1,8 @@
 # 🍔 Food Colorization using Deep Networks: Grayscale to Vibrant Color
 ### *Advanced Deep Learning Colorization using U-Net & ResNet-50*
 
-<p align="center"> <img src="https://github.com/user-attachments/assets/a82e6132-8949-4641-8513-6786c188b3e2" alt="Colorized Food Commercial" width="600" /> </p>
+<p align="center"> 
+<img src="https://github.com/user-attachments/assets/a82e6132-8949-4641-8513-6786c188b3e2" alt="Colorized Food Commercial" width="600" /> </p>
 
 <p align="center"> 
 
@@ -49,7 +50,9 @@ Below are several examples from the test set showing the input grayscale, our mo
 
 ### Training Evolution
 We monitored the model's progress throughout training using a "consistency filmstrip":
+<p align="center"> 
 <img width="560" height="1120" alt="consistency_filmstrip_10_epoch" src="https://github.com/user-attachments/assets/0bb880d1-4ab6-44ee-a2a2-efe2584f6a4c" />
+<p align="center"> 
 
 ---
 
