@@ -10,6 +10,14 @@
 Final project for the Technion's EE Deep Learning course (046217)
 <p align="center"> 
 
+---
+## 📑 Table of Contents
+
+- [📖 Introduction](#-introduction)
+- [🛠️ Model Architecture & Methodology](#️-model-architecture--methodology)
+- [🖼️ Results Gallery](#️-results-gallery)
+- [📂 Repository Contents](#-repository-contents)
+- [💻 Setup & Usage](#-setup--usage)
 
 ---
 
@@ -69,19 +77,104 @@ We monitored the model's progress throughout training using a "consistency films
 ---
 
 ## 💻 Setup & Usage
-
-1. **Clone the repo:**
+### 📌 Overview
+This repository implements image colorization on **Food-101** using a **U-Net decoder with a ResNet50 encoder**, trained in LAB color space with **soft-encoded ab bins**.
+📂 Main files:
+- `data_and_preprocess.ipynb` – dataset download and preprocessing utilities  
+- `training_and_eval_v2.py` – training, validation, checkpointing  
+- `visualization.ipynb` – inference and visualization
+- 
+### 📥 1) Clone the repository
+```bash
+git clone https://github.com/OmerBibi/Food101-Image-Colorization-with-U-Net-ResNet50
+cd Food101-Image-Colorization-with-U-Net-ResNet50
+```
+### 🐍 2) Environment setup (recommended)
+```bash
+conda create -n foodcolor python=3.10 -y
+conda activate foodcolor
+```
+### 📦 3) **Install dependencies:**
    ```bash
-   git clone https://github.com/OmerBibi/Food101-Image-Colorization-with-U-Net-ResNet50`
-    ```
-2. **Install requirements:**
-   ```bash
-   pip install torch torchvision numpy scikit-image matplotlib scikit-learn
+  pip install torch torchvision numpy scikit-image matplotlib scikit-learn pillow tqdm
    ```
-3. **Weights:** Ensure `ab_weights_k259.npy`, `ab_centers_k259.npy` and `best_ep009_loss1.4589.pt` are in the `artifacts/` folder.
-4.  Run the first cells of `data_and_preprocess.ipynb` to download the dataset
-5.  Use `visualization.ipynb` for visualization and inference
-6.  If you want to train/change pre-processing, make sure to check `data_and_preprocess.ipynb` and `training_and_eval_v2.py`
+⚠️ Notes:
+* For GPU training, install a CUDA-enabled PyTorch build matching your CUDA version.
+### 🗂️ 4) **Folder structure (important):**
+The code expects the following layout:
+   ```csharp
+Food101-Image-Colorization-with-U-Net-ResNet50/
+├─ artifacts/
+│  └─ food101_step10_sigma5_T042/
+│     ├─ ab_centers_k259.npy
+│     ├─ ab_weights_k259.npy
+│     └─ train_runs/
+│        └─ long_run_45/
+│           └─ checkpoints/
+│             ├─ best_ep009_loss1.4589.pt
+│           ├─ viz/
+│           └─ strips/
+├─ data/
+├─ data_and_preprocess.ipynb
+├─ training_and_eval_v2.py
+└─ visualization.ipynb
+```
+✅ Make sure the `artifacts/food101_step10_sigma5_T042/` folder exists and contains the required .npy files and checkpoints.
+### 🍔 5) **Download Food-101 dataset**:
+Run the first cells of: `data_and_preprocess.ipynb`
+⬇️ This will download Food-101 into the data/ directory.
+💡 Alternative: running the training script will also trigger the download automatically if the dataset is missing.
+### 🚀 6) **Training**:
+To train or retrain the model
+ ```bash
+python training_and_eval_v2.py
+ ```
+What happens:
+* Food-101 is split into train / validation
+* RGB images are converted to LAB
+* ab channels are soft-encoded using KNN
+* Encoder is frozen for warmup, then unfrozen
+* Best checkpoints are saved automatically
+* Visual diagnostics are written to:
+  `train_runs/.../viz/` , `train_runs/.../strips/consistency_filmstrip.png`
 
+### 🎨 7) **Inference and visualization**:
+Use `visualization.ipynb`
+Typical steps inside the notebook:
+
+1. Load ab_centers_k259.npy
+
+2. Build the model with num_classes = 259
+
+3. Load a checkpoint (best_epXXX_*.pt)
+
+4. Run inference on grayscale images
+
+5. Decode logits using annealed mean
+
+6. Convert LAB → RGB and visualize results
+
+🎛️Important inference parameter:
+
+`ANNEAL_T = 0.42`
+Lower values give sharper colors but may introduce artifacts.
+
+### 🛠️ 8) **Customization**:
+You can modify:
+
+- ⚙️ Training hyperparameters in training_and_eval_v2.py
+
+- 🧪 Preprocessing logic in data_and_preprocess.ipynb
+
+- 🔢 Number of ab bins (K)
+- - ⚠️ Changing K requires regenerating centers and weights and retraining.
+
+### ❗ 9) **Common issues**:
+- 📁 Missing artifacts - Check folder name: food101_step10_sigma5_T042
+
+- 🧯 CUDA out-of-memory - Reduce batch size
+
+- 🎭 Desaturated or unstable colors - Tune ANNEAL_T during inference
+  
 ---
 *Inspired by the "Colorful Image Colorization" paper (Zhang et al.) and built for the Food-101 Challenge.*
