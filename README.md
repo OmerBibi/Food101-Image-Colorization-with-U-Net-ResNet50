@@ -111,7 +111,7 @@ Food101-Image-Colorization-with-U-Net-ResNet50/
 │     └─ train_runs/
 │        └─ long_run_45/
 │           └─ checkpoints/
-│             ├─ best_ep009_loss1.4589.pt
+│             └─ best_ep009_loss1.4589.pt
 │           ├─ viz/
 │           └─ strips/
 ├─ data/
