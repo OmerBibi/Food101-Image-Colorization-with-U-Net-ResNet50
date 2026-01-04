@@ -56,7 +56,7 @@ Below are several examples from the test set showing the input grayscale, our mo
 ### Training Evolution
 We monitored the model's progress throughout training using a "consistency filmstrip":
 <p align="center"> 
-<img width="560" height="1120" alt="consistency_filmstrip_10_epoch" src="https://github.com/user-attachments/assets/0bb880d1-4ab6-44ee-a2a2-efe2584f6a4c" />
+<img width="606.5" height="1171" alt="consistency_filmstrip_10_epoch" src="https://github.com/user-attachments/assets/a5841314-6860-44b3-8307-56f339085c7d" />
 <p align="center"> 
 
 ---
