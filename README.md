@@ -96,7 +96,7 @@ conda activate foodcolor
 ```
 ### 📦 3) **Install dependencies:**
    ```bash
-  pip install torch torchvision numpy scikit-image matplotlib scikit-learn pillow tqdm
+  pip install torch torchvision numpy scikit-image matplotlib scikit-learn pillow tqdm ipykernel
    ```
 ⚠️ Notes:
 * For GPU training, install a CUDA-enabled PyTorch build matching your CUDA version.
@@ -109,10 +109,9 @@ Food101-Image-Colorization-with-U-Net-ResNet50/
 │     ├─ ab_centers_k259.npy
 │     ├─ ab_weights_k259.npy
 │     └─ train_runs/
-│        └─ long_run_45/
+│        └─ v2_45_epoch/
 │           └─ checkpoints/
 │             └─ best_ep009_loss1.4589.pt
-│           ├─ viz/
 │           └─ strips/
 ├─ data/
 ├─ data_and_preprocess.ipynb
@@ -121,7 +120,7 @@ Food101-Image-Colorization-with-U-Net-ResNet50/
 ```
 ✅ Make sure the `artifacts/food101_step10_sigma5_T042/` folder exists and contains the required .npy files and checkpoints.
 ### 🍔 5) **Download Food-101 dataset**:
-Run the first cells of: `data_and_preprocess.ipynb`
+Run the all cells of: `data_and_preprocess.ipynb`
 ⬇️ This will download Food-101 into the data/ directory.
 💡 Alternative: running the training script will also trigger the download automatically if the dataset is missing.
 ### 🚀 6) **Training**:
