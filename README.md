@@ -110,7 +110,7 @@ If you already cloned without Git LFS, you can:
 
 - Go to the repository in your browser
 
-- Navigate to the weights files
+- Navigate to the weights files (`*.pt`)
 
 - Download them manually and place them in the correct folders
 
