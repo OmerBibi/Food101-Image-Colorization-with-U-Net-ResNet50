@@ -89,6 +89,32 @@ This repository implements image colorization on **Food-101** using a **U-Net de
 git clone https://github.com/OmerBibi/Food101-Image-Colorization-with-U-Net-ResNet50
 cd Food101-Image-Colorization-with-U-Net-ResNet50
 ```
+⚠️ Important: model weights use Git LFS
+
+This repository stores trained model weights using Git LFS.
+If you don’t have Git LFS installed, the weights will not be downloaded correctly.
+
+Option A: install Git LFS (recommended):
+
+- Install Git LFS: https://git-lfs.com
+
+- Run once after install:
+```bash
+git lfs install
+```
+- Then clone the repo as usual.
+
+Option B: download weights manually
+
+If you already cloned without Git LFS, you can:
+
+- Go to the repository in your browser
+
+- Navigate to the weights files
+
+- Download them manually and place them in the correct folders
+
+If the weights files look very small (a few KB), Git LFS is not set up correctly.
 ### 🐍 2) Environment setup (recommended)
 ```bash
 conda create -n foodcolor python=3.10 -y
