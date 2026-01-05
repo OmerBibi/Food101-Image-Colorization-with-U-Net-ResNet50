@@ -104,7 +104,7 @@ git lfs install
 ```
 - Then clone the repo as usual.
 
-Option B: download weights manually
+Option B: download weights manually:
 
 If you already cloned without Git LFS, you can:
 
