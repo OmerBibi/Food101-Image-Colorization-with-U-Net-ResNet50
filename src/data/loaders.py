@@ -28,7 +28,7 @@ def create_dataloaders(
     """
     data_root = Path(config['paths']['data_root'])
     seed = config['seed']
-    val_split = config['training']['val_split']
+    val_split = config['data']['val_split']
     batch_size = config['training']['batch_size']
     num_workers = config['training']['num_workers']
     pin_memory = config['training']['pin_memory']
