@@ -1,6 +1,4 @@
 """Prior estimation and rebalancing weight computation.
-
-Extracted from data_and_preprocess.ipynb Cell 6.
 """
 
 import json

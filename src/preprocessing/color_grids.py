@@ -1,6 +1,4 @@
 """Color grid building and K-means clustering for bin center generation.
-
-Extracted from data_and_preprocess.ipynb Cell 5.
 """
 
 import json

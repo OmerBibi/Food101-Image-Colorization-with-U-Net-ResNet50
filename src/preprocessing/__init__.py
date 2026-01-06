@@ -1,6 +1,4 @@
 """Preprocessing module for color bin generation and weight computation.
-
-Extracted from data_and_preprocess.ipynb notebook.
 """
 
 from .color_grids import build_color_centers
