@@ -151,8 +151,6 @@ conda activate foodcolor
 ### 📦 3) Install dependencies
 ```bash
 pip install -e .
-# or
-pip install -r requirements.txt
 ```
 ⚠️ Notes:
 * For GPU training, install a CUDA-enabled PyTorch build matching your CUDA version.
