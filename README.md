@@ -70,20 +70,46 @@ We monitored the model's progress throughout training using a "consistency films
 ---
 
 ## 📂 Repository Contents
-* `data_and_preprocess.ipynb`: Data preparation, color binning, and weight calculation.
-* `training_and_eval_v2.py`: The main training script with validation logic.
-* `visualization.ipynb`: Inference tools for images, videos, and entropy visualization.
+
+### Source Code (`src/`)
+* **`data/`** - Dataset and data loading
+  * `datasets.py` - ColorizationFood101 dataset with soft-encoding
+  * `transforms.py` - Custom image transformations
+  * `loaders.py` - DataLoader creation
+* **`models/`** - Model architectures
+  * `unet_resnet50.py` - Configurable U-Net with ResNet encoder
+  * `blocks.py` - Reusable building blocks
+  * `losses.py` - Loss functions
+* **`training/`** - Training infrastructure
+  * `trainer.py` - Training orchestration
+  * `logger.py` - Progress logging
+  * `checkpoint.py` - Model checkpointing
+* **`utils/`** - Utility functions
+  * `color_utils.py` - Color space conversions
+  * `visualization.py` - Inference and visualization helpers
+
+### Scripts (`scripts/`)
+* `train.py` - Main training entry point
+
+### Configuration (`configs/`)
+* `default.yaml` - Base configuration with model architecture and hyperparameters
+
+### Notebooks (`notebooks/`)
+* `data_and_preprocess.ipynb` - Data preparation and preprocessing
+* `visualization.ipynb` - Inference and visualization tools
 
 ---
 
 ## 💻 Setup & Usage
 ### 📌 Overview
 This repository implements image colorization on **Food-101** using a **U-Net decoder with a ResNet50 encoder**, trained in LAB color space with **soft-encoded ab bins**.
-📂 Main files:
-- `data_and_preprocess.ipynb` – dataset download and preprocessing utilities  
-- `training_and_eval_v2.py` – training, validation, checkpointing  
-- `visualization.ipynb` – inference and visualization
-- 
+
+📂 Main components:
+- `src/` – Modular source code (data, models, training, utils)
+- `scripts/train.py` – Training entry point
+- `configs/` – YAML configuration files
+- `notebooks/` – Jupyter notebooks for preprocessing and visualization
+
 ### 📥 1) Clone the repository
 ```bash
 git clone https://github.com/OmerBibi/Food101-Image-Colorization-with-U-Net-ResNet50
@@ -92,7 +118,7 @@ cd Food101-Image-Colorization-with-U-Net-ResNet50
 ⚠️ Important: model weights use Git LFS
 
 This repository stores trained model weights using Git LFS.
-If you don’t have Git LFS installed, the weights will not be downloaded correctly.
+If you don't have Git LFS installed, the weights will not be downloaded correctly.
 
 Option A: install Git LFS (recommended):
 
@@ -115,21 +141,29 @@ If you already cloned without Git LFS, you can:
 - Download them manually and place them in the correct folders
 
 If the weights files look very small (a few KB), Git LFS is not set up correctly.
+
 ### 🐍 2) Environment setup (recommended)
 ```bash
-conda create -n foodcolor python=3.10 -y
+conda create -n foodcolor python=3.8 -y
 conda activate foodcolor
 ```
-### 📦 3) **Install dependencies:**
-   ```bash
-  pip install torch torchvision numpy scikit-image matplotlib scikit-learn pillow tqdm ipykernel
-   ```
+
+### 📦 3) Install dependencies
+```bash
+pip install -e .
+# or
+pip install -r requirements.txt
+```
 ⚠️ Notes:
 * For GPU training, install a CUDA-enabled PyTorch build matching your CUDA version.
-### 🗂️ 4) **Folder structure (important):**
+### 🗂️ 4) Folder structure (important)
 The code expects the following layout:
-   ```csharp
+```
 Food101-Image-Colorization-with-U-Net-ResNet50/
+├─ src/                    # Source code modules
+├─ scripts/                # Training scripts
+├─ configs/                # Configuration files
+├─ notebooks/              # Jupyter notebooks
 ├─ artifacts/
 │  └─ food101_step10_sigma5_T042/
 │     ├─ ab_centers_k259.npy
@@ -139,21 +173,28 @@ Food101-Image-Colorization-with-U-Net-ResNet50/
 │           └─ checkpoints/
 │             └─ best_ep009_loss1.4589.pt
 │           └─ strips/
-├─ data/
-├─ data_and_preprocess.ipynb
-├─ training_and_eval_v2.py
-└─ visualization.ipynb
+└─ data/
 ```
 ✅ Make sure the `artifacts/food101_step10_sigma5_T042/` folder exists and contains the required .npy files and checkpoints.
-### 🍔 5) **Download Food-101 dataset**:
-Run the all cells of: `data_and_preprocess.ipynb`
+
+### 🍔 5) Download Food-101 dataset
+Run all cells of: `notebooks/data_and_preprocess.ipynb`
+
 ⬇️ This will download Food-101 into the data/ directory.
+
 💡 Alternative: running the training script will also trigger the download automatically if the dataset is missing.
-### 🚀 6) **Training**:
-To train or retrain the model
- ```bash
-python training_and_eval_v2.py
- ```
+
+### 🚀 6) Training
+To train or retrain the model:
+```bash
+python scripts/train.py
+```
+
+With custom configuration:
+```bash
+python scripts/train.py --config configs/default.yaml
+```
+
 What happens:
 * Food-101 is split into train / validation
 * RGB images are converted to LAB
@@ -163,8 +204,30 @@ What happens:
 * Visual diagnostics are written to:
   `train_runs/.../viz/` , `train_runs/.../strips/consistency_filmstrip.png`
 
-### 🎨 7) **Inference and visualization**:
-Use `visualization.ipynb`
+### ⚙️ 7) Configuration
+Modify `configs/default.yaml` to adjust:
+* **Training hyperparameters**: batch size, learning rate, epochs
+* **Model architecture**: encoder (resnet18/34/50/101), decoder channels, skip connections
+* **Data augmentation**: resize size, crop size, horizontal flip
+* **Paths and directories**: data location, output paths
+
+Example configuration sections:
+```yaml
+model:
+  encoder: "resnet50"              # Options: resnet18, resnet34, resnet50, resnet101
+  decoder_channels: [1024, 512, 256, 128, 64]
+  skip_connections: true
+
+training:
+  batch_size: 64
+  epochs: 45
+  lr_decoder: 0.001
+  lr_encoder: 0.0001
+```
+
+### 🎨 8) Inference and visualization
+Use `notebooks/visualization.ipynb`
+
 Typical steps inside the notebook:
 
 1. Load ab_centers_k259.npy
@@ -184,17 +247,20 @@ Typical steps inside the notebook:
 `ANNEAL_T = 0.42`
 Lower values give sharper colors but may introduce artifacts.
 
-### 🛠️ 8) **Customization**:
+### 🛠️ 9) Customization
 You can modify:
 
-- ⚙️ Training hyperparameters in training_and_eval_v2.py
+- ⚙️ **Training hyperparameters** in `configs/default.yaml`
+  - Batch size, learning rates, epochs, weight decay
+- 🏗️ **Model architecture** in `configs/default.yaml`
+  - Encoder backbone (ResNet18/34/50/101)
+  - Decoder channel dimensions
+  - Skip connections on/off
+- 🧪 **Preprocessing logic** in `notebooks/data_and_preprocess.ipynb`
+- 🔢 **Number of ab bins (K)**
+  - ⚠️ Changing K requires regenerating centers and weights and retraining
 
-- 🧪 Preprocessing logic in data_and_preprocess.ipynb
-
-- 🔢 Number of ab bins (K)
-- - ⚠️ Changing K requires regenerating centers and weights and retraining.
-
-### ❗ 9) **Common issues**:
+### ❗ 10) Common issues
 - 📁 Missing artifacts - Check folder name: food101_step10_sigma5_T042
 
 - 🧯 CUDA out-of-memory - Reduce batch size

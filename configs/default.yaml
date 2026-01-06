@@ -1,0 +1,96 @@
+# Food101 Colorization Configuration
+
+# Random Seed
+seed: 42
+
+# Device (auto-detected, can override)
+device: "cuda"  # Options: "cuda", "cpu"
+
+# Paths
+paths:
+  data_root: "./data"
+  artifact_dir: "artifacts/food101_step10_sigma5_T042"
+  centers_file: "ab_centers_k259.npy"
+  weights_file: "ab_weights_k259.npy"
+
+# Color Space Parameters
+color:
+  ab_min: -110.0
+  ab_max: 110.0
+  num_bins: 259  # Number of color bins (K)
+
+# Soft Encoding Parameters
+soft_encoding:
+  k_neighbors: 5      # Number of nearest neighbors for soft encoding
+  sigma_soft: 5.0     # Gaussian sigma for soft encoding weights
+  anneal_t: 0.42      # Annealing temperature for decoding
+
+# Data Augmentation & Preprocessing
+data:
+  resize_short_side: 256
+  crop_size: 224
+  train_horizontal_flip: true
+  val_split: 0.1      # 10% validation split
+
+# Model Architecture Configuration
+model:
+  # Encoder Configuration
+  encoder: "resnet50"              # Options: resnet18, resnet34, resnet50, resnet101
+  encoder_pretrained: true         # Use ImageNet pretrained weights
+
+  # Bottleneck Configuration
+  bottleneck_channels: [2048, 1024, 1024]  # Bottleneck layer sizes after encoder
+
+  # Decoder Configuration
+  decoder_channels: [1024, 512, 256, 128, 64]  # Channel sizes for each upsampling level
+  # Note: decoder_channels should have 5 elements for 4 upsampling blocks + final layer
+
+  # Normalization
+  groupnorm_groups: 32             # Number of groups for GroupNorm
+
+  # Skip Connections
+  skip_connections: true           # Enable/disable skip connections
+
+  # Encoder Feature Channels (ResNet50 specific)
+  # These are fixed based on the encoder architecture
+  # resnet50: [64, 256, 512, 1024, 2048]
+  # resnet34: [64, 64, 128, 256, 512]
+  # resnet18: [64, 64, 128, 256, 512]
+
+# Training Hyperparameters
+training:
+  batch_size: 64
+  epochs: 45
+  lr_decoder: 0.001     # 1e-3
+  lr_encoder: 0.0001    # 1e-4
+  weight_decay: 0.0001  # 1e-4
+  grad_clip: 1.0
+  freeze_epochs: 2      # Warm up decoder for 2 epochs before unfreezing encoder
+  num_workers: 8
+  pin_memory: true
+
+# Checkpoint Management
+checkpointing:
+  save_top_k: 3                           # Save top-3 checkpoints for each metric
+  metrics_to_track: ['loss', 'lpips', 'ssim', 'psnr']  # Metrics for checkpoint management
+  monitor: "val_loss"                     # Primary metric for console output
+  mode: "min"
+
+# Validation Metrics
+validation:
+  compute_perceptual_metrics: true        # Enable perceptual quality metrics
+  metrics:
+    lpips:
+      enabled: true
+      net: "alex"                         # Options: "alex", "vgg"
+    ssim:
+      enabled: true
+    psnr:
+      enabled: true
+
+# Output Directories (relative to artifact_dir)
+output:
+  run_name: "long_run_45"
+  checkpoint_dir: "checkpoints"
+  viz_dir: "viz"
+  strip_dir: "strips"
