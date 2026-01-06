@@ -25,6 +25,27 @@ soft_encoding:
   sigma_soft: 5.0     # Gaussian sigma for soft encoding weights
   anneal_t: 0.42      # Annealing temperature for decoding
 
+# Preprocessing Configuration
+preprocessing:
+  target_bins: 300              # Target number of color bins (may be reduced if fewer observed)
+  grid_step: 10.0               # Grid spacing in ab space
+  prune_images: 30000           # Number of images to use for grid pruning
+  prior_use_all_train: true     # Use all training images for prior (vs just prune_images)
+  prior_batch_size: 256         # Image batch size for prior computation
+  smooth_neighbors: 60          # Number of neighbors for prior smoothing
+  sigma_smooth: 5.0             # Gaussian sigma for prior smoothing
+  lambda_uniform: 0.5           # Uniform mixing: (1-λ)*p_smooth + λ/K
+
+# Inference Configuration
+inference:
+  batch_size: 16                # Batch size for inference
+  temperature_default: 0.42     # Default annealing temperature
+  video:
+    max_frames: 1000            # Maximum frames to process (null = all)
+    default_fps: 30.0           # Default output fps
+    codec: 'mp4v'               # Video codec
+    gif_fps: 10.0               # GIF frame rate
+
 # Data Augmentation & Preprocessing
 data:
   resize_short_side: 256

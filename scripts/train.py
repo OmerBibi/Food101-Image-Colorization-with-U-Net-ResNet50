@@ -17,6 +17,75 @@ from src.models.unet_resnet50 import UNetResNet50
 from src.training.trainer import Trainer
 
 
+def ensure_preprocessing_artifacts(cfg):
+    """Run preprocessing if artifacts are missing.
+
+    Args:
+        cfg: Config instance
+    """
+    if cfg.centers_path.exists() and cfg.weights_path.exists():
+        return
+
+    print("\n" + "=" * 70)
+    print("Preprocessing artifacts not found!")
+    print("Running automatic preprocessing...")
+    print("=" * 70 + "\n")
+
+    # Import preprocessing functions
+    from src.preprocessing.color_grids import build_color_centers
+    from src.preprocessing.prior_weights import compute_rebalancing_weights
+    from torchvision.datasets import Food101
+    from src.data.transforms import get_val_transforms
+
+    # Load dataset
+    train_base = Food101(root=str(cfg.data_root), split="train", download=True)
+
+    # Create train/val split (consistent with training)
+    seed = cfg.config['seed']
+    n = len(train_base)
+    idx = np.arange(n)
+    np.random.default_rng(seed).shuffle(idx)
+    n_val = int(round(cfg.config['data']['val_split'] * n))
+    trn_idx = idx[n_val:].tolist()
+
+    # Get preprocessing transform
+    preprocess_tf = get_val_transforms(cfg.config)
+
+    # Build centers if needed
+    if not cfg.centers_path.exists():
+        print("Building color centers...")
+        centers, K = build_color_centers(
+            dataset=train_base,
+            indices=trn_idx,
+            transform=preprocess_tf,
+            K=cfg.config['preprocessing']['target_bins'],
+            output_path=cfg.centers_path,
+            config=cfg.config
+        )
+    else:
+        centers = np.load(cfg.centers_path).astype(np.float32)
+
+    # Build weights if needed
+    if not cfg.weights_path.exists():
+        print("\nComputing rebalancing weights...")
+        # Use all training images for prior computation
+        prior_use_all = cfg.config['preprocessing'].get('prior_use_all_train', True)
+        prior_indices = trn_idx if prior_use_all else trn_idx[:cfg.config['preprocessing']['prune_images']]
+
+        compute_rebalancing_weights(
+            dataset=train_base,
+            indices=prior_indices,
+            transform=preprocess_tf,
+            centers=centers,
+            output_path=cfg.weights_path,
+            config=cfg.config
+        )
+
+    print("\n" + "=" * 70)
+    print("Automatic preprocessing complete!")
+    print("=" * 70 + "\n")
+
+
 def main(args):
     # Load configuration
     cfg = Config(args.config)
@@ -31,6 +100,9 @@ def main(args):
 
     print(f"Starting training on {cfg.device}")
     print(f"Config: {args.config}")
+
+    # Ensure preprocessing artifacts exist (run if missing)
+    ensure_preprocessing_artifacts(cfg)
 
     # Load centers and weights
     centers = np.load(cfg.centers_path).astype(np.float32)
