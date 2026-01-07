@@ -1,10 +1,9 @@
 # 🍔 Food Colorization using Deep Networks: Grayscale to Vibrant Color
 ### *Advanced Deep Learning Colorization using U-Net & ResNet-50*
 
-<p align="center"> 
-<img src="https://github.com/user-attachments/assets/a82e6132-8949-4641-8513-6786c188b3e2" alt="Colorized Food Commercial" width="600" /> </p>
-
-<p align="center"> 
+<p align="center">
+  <img src="outputs/colorized_video.gif" alt="Colorized Food Commercial" width="1200" />
+</p>
 
 <p align="center"> 
 Final project for the Technion's EE Deep Learning course (046217)
@@ -15,6 +14,7 @@ Final project for the Technion's EE Deep Learning course (046217)
 
 - [📖 Introduction](#-introduction)
 - [🛠️ Model Architecture & Methodology](#️-model-architecture--methodology)
+- [📈 Training Summary](#️-training-summary)
 - [🖼️ Results Gallery](#️-results-gallery)
 - [📂 Repository Contents](#-repository-contents)
 - [💻 Setup & Usage](#-setup--usage)
@@ -47,6 +47,15 @@ The core of this project is a **Quantized Color Class Prediction** model. Instea
   
 ---
 
+## 📈 Training Summary
+
+Training converges smoothly with stable optimization. While validation loss increases at later epochs, perceptual quality (LPIPS) and image fidelity (SSIM, PSNR) continue to improve and stabilize. We therefore use the epoch 39 checkpoint, which provides the best visual and perceptual results in practice.
+
+<p align="center">
+  <img src="artifacts/food101_step10_sigma5_T042/train_runs/long_run_45/training_curves.png" alt="Colorized Food Commercial" width="600" />
+</p>
+---
+
 ## 🖼️ Results Gallery
 
 ### Side-by-Side Test Comparisons
@@ -55,8 +64,8 @@ Below are several examples from the test set showing the input grayscale, our mo
 <p align="center">
   <table>
     <tr>
-      <td><img src="https://github.com/user-attachments/assets/7afb2432-cf7f-4c82-8b96-8d093ed2bf5d" width="450" alt="Evaluation 1"></td>
-      <td><img src="https://github.com/user-attachments/assets/54b3ece4-7d31-47ef-916f-5ad68c6bd6dc" width="450" alt="Evaluation 2"></td>
+      <td><img src="outputs/colorization_comparison_1.png" width="450" alt="Evaluation 1"></td>
+      <td><img src="outputs/colorization_comparison_2.png" width="450" alt="Evaluation 2"></td>
     </tr>
   </table>
 </p>
