@@ -293,6 +293,7 @@ def colorize_video(
     work_dir = output_path.parent / f"{output_path.stem}_frames"
     work_dir.mkdir(parents=True, exist_ok=True)
 
+    input_dir = work_dir / "input"
     gray_dir = work_dir / "grayscale"
     color_dir = work_dir / "colorized"
 
@@ -302,7 +303,7 @@ def colorize_video(
         print("-" * 70)
         frame_paths, original_fps, (w, h) = extract_frames(
             video_path,
-            gray_dir,
+            input_dir,
             max_frames=max_frames,
             fps=target_fps
         )
@@ -311,7 +312,9 @@ def colorize_video(
         # Step 2: Colorize frames
         print("Step 2: Colorizing frames")
         print("-" * 70)
+        gray_dir.mkdir(exist_ok=True)
         color_dir.mkdir(exist_ok=True)
+        grayscale_paths = []
         colorized_paths = []
 
         for i, frame_path in enumerate(frame_paths):
@@ -320,6 +323,14 @@ def colorize_video(
                 frame_path,
                 temperature=temperature
             )
+
+            # Save grayscale L channel frame
+            gray_path = gray_dir / frame_path.name
+            L_uint8 = (result['L'] * 255).astype(np.uint8)
+            # Convert single channel to RGB for GIF compatibility
+            L_rgb = np.stack([L_uint8, L_uint8, L_uint8], axis=-1)
+            Image.fromarray(L_rgb).save(gray_path)
+            grayscale_paths.append(gray_path)
 
             # Save colorized frame
             color_path = color_dir / frame_path.name
@@ -346,7 +357,7 @@ def colorize_video(
             print("-" * 70)
             gif_path = output_path.with_suffix('.gif')
             gif_fps = min(use_fps, 15)  # Cap GIF fps for reasonable file size
-            frames_to_comparison_gif(frame_paths, colorized_paths, gif_path, fps=gif_fps)
+            frames_to_comparison_gif(grayscale_paths, colorized_paths, gif_path, fps=gif_fps)
             print()
 
         print("=" * 70)
