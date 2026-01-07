@@ -45,13 +45,15 @@ class ColorizationInference:
         self.model.eval()
 
         # Setup preprocessing transform
-        from ..data.transforms import get_val_transforms
-        self.preprocess_tf = get_val_transforms(config)
+        from ..data.transforms import get_inference_transforms
+        use_full_size = config.get('inference', {}).get('use_full_size', True)
+        self.preprocess_tf = get_inference_transforms(config, use_full_size=use_full_size)
 
         print(f"Inference manager initialized:")
         print(f"  Device: {self.device}")
         print(f"  Color bins: {self.K}")
         print(f"  Model: {model_path.name}")
+        print(f"  Full-size inference: {use_full_size}")
 
     def _load_model(self, model_path: Path):
         """Load model from checkpoint.
@@ -89,7 +91,8 @@ class ColorizationInference:
         self,
         image: Union[Path, str, Image.Image, np.ndarray],
         temperature: float = None,
-        return_entropy: bool = False
+        return_entropy: bool = False,
+        use_full_size: bool = None
     ) -> Dict[str, np.ndarray]:
         """Colorize a single image.
 
@@ -97,6 +100,7 @@ class ColorizationInference:
             image: Input image (Path, PIL.Image, or numpy array)
             temperature: Annealing temperature (None = use config default)
             return_entropy: Whether to include entropy map
+            use_full_size: Override config setting for full-size inference
 
         Returns:
             Dictionary with keys:
@@ -107,7 +111,15 @@ class ColorizationInference:
         """
         # Load and preprocess image
         img_pil = self._load_image(image)
-        img_tf = self.preprocess_tf(img_pil)
+
+        # Apply transform (use override if provided)
+        if use_full_size is not None:
+            # Create temporary transform with override
+            from ..data.transforms import get_inference_transforms
+            img_tf = get_inference_transforms(self.config, use_full_size=use_full_size)(img_pil)
+        else:
+            # Use default transform
+            img_tf = self.preprocess_tf(img_pil)
 
         # Convert to LAB
         rgb01 = pil_to_rgb01(img_tf)
@@ -180,14 +192,19 @@ class ColorizationInference:
         self,
         images: list,
         temperature: float = None,
-        batch_size: int = None
+        batch_size: int = None,
+        use_full_size: bool = None
     ) -> list:
         """Colorize multiple images efficiently.
+
+        Note: When use_full_size=True, images may have different sizes,
+        so they are processed individually (batch_size is ignored).
 
         Args:
             images: List of images (paths, PIL Images, or numpy arrays)
             temperature: Annealing temperature (None = use config default)
             batch_size: Batch size for processing (None = use config default)
+            use_full_size: Override config setting for full-size inference
 
         Returns:
             List of result dictionaries (same format as colorize_image)
@@ -195,11 +212,23 @@ class ColorizationInference:
         if batch_size is None:
             batch_size = self.config.get('inference', {}).get('batch_size', 16)
 
+        # Determine full-size mode
+        full_size = use_full_size if use_full_size is not None else \
+                    self.config.get('inference', {}).get('use_full_size', True)
+
+        # When using full-size inference, images have different dimensions
+        if full_size:
+            print("Full-size mode: Processing images individually")
+
         results = []
-        for i in range(0, len(images), batch_size):
-            batch = images[i:i + batch_size]
+        for i in range(0, len(images), 1 if full_size else batch_size):
+            batch = images[i:i + (1 if full_size else batch_size)]
             for img in batch:
-                result = self.colorize_image(img, temperature=temperature)
+                result = self.colorize_image(
+                    img,
+                    temperature=temperature,
+                    use_full_size=use_full_size
+                )
                 results.append(result)
 
         return results

@@ -40,6 +40,12 @@ preprocessing:
 inference:
   batch_size: 16                # Batch size for inference
   temperature_default: 0.42     # Default annealing temperature
+
+  # Full-size inference settings
+  use_full_size: true           # Enable full-size inference without cropping
+  resize_divisor: 32            # Resize to dimensions divisible by this
+  max_inference_size: 1024      # Maximum dimension size (prevents OOM on huge images)
+
   video:
     max_frames: 1000            # Maximum frames to process (null = all)
     default_fps: 30.0           # Default output fps

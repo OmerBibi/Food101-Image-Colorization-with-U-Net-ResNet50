@@ -194,6 +194,72 @@ def frames_to_gif(
     print(f"  GIF saved: {output_path}")
 
 
+def frames_to_comparison_gif(
+    gray_frame_paths: List[Path],
+    color_frame_paths: List[Path],
+    output_path: Path,
+    fps: float = 10.0,
+    loop: int = 0,
+    optimize: bool = True
+):
+    """Create animated GIF with grayscale and colorized frames side-by-side.
+
+    Args:
+        gray_frame_paths: List of paths to grayscale frame images
+        color_frame_paths: List of paths to colorized frame images
+        output_path: Output GIF path
+        fps: Frames per second
+        loop: Number of loops (0 = infinite)
+        optimize: Optimize GIF size
+    """
+    if not gray_frame_paths or not color_frame_paths:
+        raise ValueError("No frames to create GIF")
+
+    if len(gray_frame_paths) != len(color_frame_paths):
+        raise ValueError(f"Frame count mismatch: {len(gray_frame_paths)} gray vs {len(color_frame_paths)} color")
+
+    # Ensure output directory exists
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    print(f"Creating comparison GIF: {output_path.name}")
+    print(f"  {len(gray_frame_paths)} frames at {fps} fps")
+    print(f"  Layout: Grayscale | Colorized")
+
+    # Load and combine frames side-by-side
+    combined_frames = []
+    for gray_path, color_path in zip(gray_frame_paths, color_frame_paths):
+        gray_img = Image.open(gray_path).convert('RGB')
+        color_img = Image.open(color_path).convert('RGB')
+
+        # Ensure both images have the same height
+        if gray_img.size != color_img.size:
+            # Resize to match the color image size
+            gray_img = gray_img.resize(color_img.size, Image.BICUBIC)
+
+        # Create side-by-side image
+        w, h = color_img.size
+        combined = Image.new('RGB', (w * 2, h))
+        combined.paste(gray_img, (0, 0))
+        combined.paste(color_img, (w, 0))
+
+        combined_frames.append(combined)
+
+    # Calculate duration per frame (milliseconds)
+    duration = int(1000 / fps)
+
+    # Save as GIF
+    combined_frames[0].save(
+        output_path,
+        save_all=True,
+        append_images=combined_frames[1:],
+        duration=duration,
+        loop=loop,
+        optimize=optimize
+    )
+
+    print(f"  GIF saved: {output_path}")
+
+
 def colorize_video(
     video_path: Path,
     output_path: Path,
@@ -280,7 +346,7 @@ def colorize_video(
             print("-" * 70)
             gif_path = output_path.with_suffix('.gif')
             gif_fps = min(use_fps, 15)  # Cap GIF fps for reasonable file size
-            frames_to_gif(colorized_paths, gif_path, fps=gif_fps)
+            frames_to_comparison_gif(frame_paths, colorized_paths, gif_path, fps=gif_fps)
             print()
 
         print("=" * 70)
