@@ -8,6 +8,7 @@
 <p align="center"> 
 Final project for the Technion's EE Deep Learning course (046217)
 <p align="center"> 
+  
 ---
 
 # ⚠️ **Important**
@@ -22,6 +23,7 @@ If you skip Git LFS, inference will silently break.
  git lfs pull
  ```
 ---
+
 ## 📑 Table of Contents
 
 - [📖 Introduction](#-introduction)
