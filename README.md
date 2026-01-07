@@ -6,6 +6,7 @@
 </p>
 
 <p align="center"> 
+  <i>Video created by Google's Nano Banana, and inferenced by our model</i> <br> <br>
 Final project for the Technion's EE Deep Learning course (046217)
 <p align="center"> 
   
