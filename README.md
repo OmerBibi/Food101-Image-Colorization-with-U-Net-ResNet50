@@ -14,7 +14,7 @@ Final project for the Technion's EE Deep Learning course (046217)
 
 - [📖 Introduction](#-introduction)
 - [🛠️ Model Architecture & Methodology](#️-model-architecture--methodology)
-- [📈 Training Summary](#️-training-summary)
+- [📈 Training Summary](#️training-summary)
 - [🖼️ Results Gallery](#️-results-gallery)
 - [📂 Repository Contents](#-repository-contents)
 - [💻 Setup & Usage](#-setup--usage)
