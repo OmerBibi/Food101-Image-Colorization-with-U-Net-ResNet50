@@ -97,8 +97,7 @@ Below are several examples from the test set showing the input grayscale, our mo
 ### Configuration (`configs/`)
 * `default.yaml` - Base configuration with model architecture and hyperparameters
 
-### Notebooks (`notebooks/`)
-* `data_and_preprocess.ipynb` - Data preparation and preprocessing
+### Notebooks
 * `visualization.ipynb` - Inference and visualization tools
 
 ---
@@ -175,14 +174,8 @@ Food101-Image-Colorization-with-U-Net-ResNet50/
 ```
 ✅ Make sure the `artifacts/food101_step10_sigma5_T042/` folder exists and contains the required .npy files and checkpoints.
 
-### 🍔 5) Download Food-101 dataset
-Run all cells of: `notebooks/data_and_preprocess.ipynb`
 
-⬇️ This will download Food-101 into the data/ directory.
-
-💡 Alternative: running the training script will also trigger the download automatically if the dataset is missing.
-
-### 🚀 6) Training
+### 🚀 5) Training
 To train or retrain the model:
 ```bash
 python scripts/train.py
@@ -194,7 +187,8 @@ python scripts/train.py --config configs/default.yaml
 ```
 
 What happens:
-* Food-101 is split into train / validation
+* Food-101 will be downloaded into the data/ directory
+* Food-101 is split into train/validation
 * RGB images are converted to LAB
 * ab channels are soft-encoded using KNN
 * Encoder is frozen for warmup, then unfrozen
@@ -202,11 +196,10 @@ What happens:
 * Visual diagnostics are written to:
   `train_runs/.../viz/` , `train_runs/.../strips/consistency_filmstrip.png`
 
-### ⚙️ 7) Configuration
+### ⚙️ 6) Configuration
 Modify `configs/default.yaml` to adjust:
 * **Training hyperparameters**: batch size, learning rate, epochs
 * **Model architecture**: encoder (resnet18/34/50/101), decoder channels, skip connections
-* **Data augmentation**: resize size, crop size, horizontal flip
 * **Paths and directories**: data location, output paths
 
 Example configuration sections:
@@ -223,29 +216,15 @@ training:
   lr_encoder: 0.0001
 ```
 
-### 🎨 8) Inference and visualization
-Use `notebooks/visualization.ipynb`
-
-Typical steps inside the notebook:
-
-1. Load ab_centers_k259.npy
-
-2. Build the model with num_classes = 259
-
-3. Load a checkpoint (best_epXXX_*.pt)
-
-4. Run inference on grayscale images
-
-5. Decode logits using annealed mean
-
-6. Convert LAB → RGB and visualize results
+### 🎨 7) Inference and visualization
+Use `visualization.ipynb`
 
 🎛️Important inference parameter:
 
 `ANNEAL_T = 0.42`
 Lower values give sharper colors but may introduce artifacts.
 
-### 🛠️ 9) Customization
+### 🛠️ 8) Customization
 You can modify:
 
 - ⚙️ **Training hyperparameters** in `configs/default.yaml`
@@ -254,11 +233,11 @@ You can modify:
   - Encoder backbone (ResNet18/34/50/101)
   - Decoder channel dimensions
   - Skip connections on/off
-- 🧪 **Preprocessing logic** in `notebooks/data_and_preprocess.ipynb`
+- 🧪 **Preprocessing logic**
 - 🔢 **Number of ab bins (K)**
   - ⚠️ Changing K requires regenerating centers and weights and retraining
 
-### ❗ 10) Common issues
+### ❗ 9) Common issues
 - 📁 Missing artifacts - Check folder name: food101_step10_sigma5_T042
 
 - 🧯 CUDA out-of-memory - Reduce batch size
