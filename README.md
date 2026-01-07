@@ -18,12 +18,6 @@ This repository uses **Git LFS** for model checkpoints and color bin files.
 If you skip Git LFS, inference will silently break.
 
  Install Git LFS: https://git-lfs.com  
- Then run:
- ```bash
- git lfs install
- git lfs pull
- ```
----
 
 ## 📑 Table of Contents
 
