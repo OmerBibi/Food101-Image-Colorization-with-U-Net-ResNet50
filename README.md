@@ -202,7 +202,11 @@ If you don't have Git LFS installed, the weights will not be downloaded correctl
 
 Option A: install Git LFS (recommended), then clone the repo as usual.
 
-If the weights files look very small (a few KB), Git LFS is not set up correctly.
+If the weights files look very small (a few KB), try running 
+```bash
+git lfs pull
+```
+If the problem persists, Git LFS is not set up correctly.
 
 Option B: download weights manually through your browser.
 
