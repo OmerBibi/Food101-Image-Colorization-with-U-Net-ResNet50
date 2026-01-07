@@ -8,13 +8,25 @@
 <p align="center"> 
 Final project for the Technion's EE Deep Learning course (046217)
 <p align="center"> 
+---
 
+# ⚠️ **Important**
+
+This repository uses **Git LFS** for model checkpoints and color bin files.
+If you skip Git LFS, inference will silently break.
+
+ Install Git LFS: https://git-lfs.com  
+ Then run:
+ ```bash
+ git lfs install
+ git lfs pull
+ ```
 ---
 ## 📑 Table of Contents
 
 - [📖 Introduction](#-introduction)
 - [🛠️ Model Architecture & Methodology](#️-model-architecture--methodology)
-- [📈 Training Summary](#️-training-summary)
+- [📈 Training Summary](#-training-summary)
 - [🖼️ Results Gallery](#️-results-gallery)
 - [📂 Repository Contents](#-repository-contents)
 - [💻 Setup & Usage](#-setup--usage)
@@ -46,7 +58,59 @@ The core of this project is a **Quantized Color Class Prediction** model. Instea
 <p align="center">
   
 ---
+## Key Design Choices
 
+### Why classification instead of regression
+Image colorization is inherently **multimodal**. The same grayscale texture can map to many valid colors
+(for example, red vs green apples, or rare vs well-done meat).  
+Direct regression with an L2 loss forces the model to average these possibilities, which leads to
+desaturated, brownish results.
+
+Instead, the problem is framed as **classification over quantized ab color bins**.
+The network predicts a probability distribution over colors for each pixel,
+allowing it to represent multiple plausible outcomes rather than a single mean value.
+
+This formulation is critical for producing vibrant and realistic colors.
+
+---
+
+### Why CIE Lab color space
+The CIE Lab color space separates **luminance (L)** from **chrominance (a, b)**.
+
+- The input grayscale image provides the L channel directly.
+- The network only needs to predict the ab channels.
+
+This separation simplifies the learning problem:
+the model does not waste capacity on brightness reconstruction and can focus entirely on color.
+Lab space also aligns better with human perception, making color errors less visually disturbing.
+
+---
+
+### Why annealed mean decoding (T = 0.42)
+During inference, directly taking the argmax color bin produces noisy, pixel-level artifacts.
+A standard mean, on the other hand, pushes predictions toward gray.
+
+Annealed mean decoding applies a temperature-scaled softmax before computing the expected color:
+- **Lower temperature** sharpens the distribution.
+- **Higher temperature** smooths it.
+
+A temperature of **T = 0.42** was chosen empirically to balance
+color vividness and spatial consistency, producing strong colors without speckle noise.
+
+---
+
+### Why class rebalancing
+Natural images contain far more neutral colors than saturated ones.
+Without correction, the network learns to overpredict gray and brown tones.
+
+To counter this imbalance, class-frequency-based weights are applied in the loss function.
+Rare but important colors receive higher weight, encouraging the model to use the full color space.
+
+This step is essential for avoiding color collapse and achieving visually pleasing results.
+
+
+
+---
 ## 📈 Training Summary
 
 Training converges smoothly with stable optimization. While validation loss increases at later epochs, perceptual quality (LPIPS) and image fidelity (SSIM, PSNR) continue to improve and stabilize. We therefore use the epoch 39 checkpoint, which provides the best visual and perceptual results in practice.
@@ -110,7 +174,6 @@ This repository implements image colorization on **Food-101** using a **U-Net de
 - `src/` – Modular source code (data, models, training, utils)
 - `scripts/train.py` – Training entry point
 - `configs/` – YAML configuration files
-- `notebooks/` – Jupyter notebooks for preprocessing and visualization
 
 ### 📥 1) Clone the repository
 ```bash
@@ -122,18 +185,8 @@ cd Food101-Image-Colorization-with-U-Net-ResNet50
 This repository stores trained model weights using Git LFS.
 If you don't have Git LFS installed, the weights will not be downloaded correctly.
 
-Option A: install Git LFS (recommended):
+Option A: install Git LFS (recommended), then clone the repo as usual.
 
-- Install Git LFS: https://git-lfs.com
-
-- Run once after install:
-```bash
-git lfs install
-```
-- Then clone the repo as usual. Then:
-```bash
-git lfs pull
-```
 If the weights files look very small (a few KB), Git LFS is not set up correctly.
 
 Option B: download weights manually through your browser.
@@ -154,26 +207,32 @@ pip install -e .
 ⚠️ Notes:
 * For GPU training, install a CUDA-enabled PyTorch build matching your CUDA version.
 ### 🗂️ 4) Folder structure (important)
-The code expects the following layout:
-```
+Top-level layout in this repo:
+
+```text
 Food101-Image-Colorization-with-U-Net-ResNet50/
-├─ src/                    # Source code modules
-├─ scripts/                # Training scripts
-├─ configs/                # Configuration files
-├─ notebooks/              # Jupyter notebooks
-├─ artifacts/
-│  └─ food101_step10_sigma5_T042/
-│     ├─ ab_centers_k259.npy
-│     ├─ ab_weights_k259.npy
-│     └─ train_runs/
-│        └─ v2_45_epoch/
-│           └─ checkpoints/
-│             └─ best_ep009_loss1.4589.pt
-│           └─ strips/
-└─ data/
+├─ src/                    # Core package (data, models, training, utils)
+├─ scripts/                # Entry points (training, etc.)
+├─ configs/                # YAML configs
+├─ data/                   # Downloaded dataset + cached assets (created at runtime)
+├─ artifacts/              # Precomputed color bins + trained checkpoints (tracked via Git LFS)
+├─ outputs/                # Result images / gifs for the README
+├─ reference/              # Reference figures / notes
+├─ visualization.ipynb     # Inference + visualization notebook
+├─ requirements.txt
+└─ setup.py
 ```
 ✅ Make sure the `artifacts/food101_step10_sigma5_T042/` folder exists and contains the required .npy files and checkpoints.
-
+Required artifacts (used by training + inference):
+```text
+artifacts/
+└─ food101_step10_sigma5_T042/
+   ├─ ab_centers_k259.npy
+   ├─ ab_weights_k259.npy
+   └─ train_runs/
+      └─ .../checkpoints/
+         └─ best_*.pt
+```
 
 ### 🚀 5) Training
 To train or retrain the model:
