@@ -112,6 +112,7 @@ This step is essential for avoiding color collapse and achieving visually pleasi
 
 
 ---
+
 ## 📈 Training Summary
 
 Training converges smoothly with stable optimization. While validation loss increases at later epochs, perceptual quality (LPIPS) and image fidelity (SSIM, PSNR) continue to improve and stabilize. We therefore use the epoch 39 checkpoint, which provides the best visual and perceptual results in practice.
@@ -119,6 +120,7 @@ Training converges smoothly with stable optimization. While validation loss incr
 <p align="center">
   <img src="artifacts/food101_step10_sigma5_T042/train_runs/long_run_45/training_curves.png" alt="Colorized Food Commercial" width="600" />
 </p>
+
 ---
 
 ## 🖼️ Results Gallery
