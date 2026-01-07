@@ -57,10 +57,10 @@ The core of this project is a **Quantized Color Class Prediction** model. Instea
 <img width="444" height="608" alt="graphviz (1)" src="https://github.com/user-attachments/assets/a8545a93-3179-4076-b949-c9a55e5f22d0" />
 <p align="center">
   
----
-## Key Design Choices
 
-### Why classification instead of regression
+### ✍ Key Design Choices
+
+#### Why classification instead of regression
 Image colorization is inherently **multimodal**. The same grayscale texture can map to many valid colors
 (for example, red vs green apples, or rare vs well-done meat).  
 Direct regression with an L2 loss forces the model to average these possibilities, which leads to
@@ -72,9 +72,8 @@ allowing it to represent multiple plausible outcomes rather than a single mean v
 
 This formulation is critical for producing vibrant and realistic colors.
 
----
 
-### Why CIE Lab color space
+#### Why CIE Lab color space
 The CIE Lab color space separates **luminance (L)** from **chrominance (a, b)**.
 
 - The input grayscale image provides the L channel directly.
@@ -84,9 +83,9 @@ This separation simplifies the learning problem:
 the model does not waste capacity on brightness reconstruction and can focus entirely on color.
 Lab space also aligns better with human perception, making color errors less visually disturbing.
 
----
 
-### Why annealed mean decoding (T = 0.42)
+
+#### Why annealed mean decoding (T = 0.42)
 During inference, directly taking the argmax color bin produces noisy, pixel-level artifacts.
 A standard mean, on the other hand, pushes predictions toward gray.
 
@@ -97,9 +96,9 @@ Annealed mean decoding applies a temperature-scaled softmax before computing the
 A temperature of **T = 0.42** was chosen empirically to balance
 color vividness and spatial consistency, producing strong colors without speckle noise.
 
----
 
-### Why class rebalancing
+
+#### Why class rebalancing
 Natural images contain far more neutral colors than saturated ones.
 Without correction, the network learns to overpredict gray and brown tones.
 
@@ -139,21 +138,32 @@ Below are several examples from the test set showing the input grayscale, our mo
 ## 📂 Repository Contents
 
 ### Source Code (`src/`)
-* **`data/`** - Dataset and data loading
-  * `datasets.py` - ColorizationFood101 dataset with soft-encoding
-  * `transforms.py` - Custom image transformations
-  * `loaders.py` - DataLoader creation
-* **`models/`** - Model architectures
-  * `unet_resnet50.py` - Configurable U-Net with ResNet encoder
-  * `blocks.py` - Reusable building blocks
-  * `losses.py` - Loss functions
-* **`training/`** - Training infrastructure
-  * `trainer.py` - Training orchestration
-  * `logger.py` - Progress logging
-  * `checkpoint.py` - Model checkpointing
-* **`utils/`** - Utility functions
-  * `color_utils.py` - Color space conversions
-  * `visualization.py` - Inference and visualization helpers
+
+Core implementation of the colorization pipeline.
+
+* **`data/`** – Dataset handling and preprocessing  
+  * `datasets.py` – Food-101 colorization dataset with soft-encoding of ab bins  
+  * `transforms.py` – Custom image transforms (Lab conversion, resizing, normalization)  
+  * `loaders.py` – DataLoader construction and train/val splits  
+
+* **`models/`** – Model architectures and losses  
+  * `unet_resnet50.py` – U-Net decoder with ResNet-50 encoder (1-channel input)  
+  * `blocks.py` – Reusable convolutional and upsampling blocks  
+  * `losses.py` – Classification loss with class rebalancing  
+
+* **`training/`** – Training infrastructure  
+  * `trainer.py` – Training and validation loops  
+  * `checkpoint.py` – Checkpoint save / load logic  
+  * `logger.py` – Metric and progress logging utilities  
+
+* **`utils/`** – Shared utilities  
+  * `color_utils.py` – Lab ↔ RGB conversions, annealed mean decoding  
+  * `visualization.py` – Inference helpers and plotting utilities  
+  * `metrics.py` – (If present) Training-time evaluation metrics  
+  * `config.py` – (If present) Config loading and validation  
+
+> Note: Some utility files may not be imported directly by entry scripts but are used
+internally by training, inference, or visualization pipelines.
 
 ### Scripts (`scripts/`)
 * `train.py` - Main training entry point
