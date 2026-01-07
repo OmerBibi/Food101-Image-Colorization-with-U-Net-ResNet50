@@ -164,8 +164,8 @@ Core implementation of the colorization pipeline.
 * **`utils/`** – Shared utilities  
   * `color_utils.py` – Lab ↔ RGB conversions, annealed mean decoding  
   * `visualization.py` – Inference helpers and plotting utilities  
-  * `metrics.py` – (If present) Training-time evaluation metrics  
-  * `config.py` – (If present) Config loading and validation  
+  * `metrics.py` – Training-time evaluation metrics  
+  * `config.py` – Config loading and validation  
 
 > Note: Some utility files may not be imported directly by entry scripts but are used
 internally by training, inference, or visualization pipelines.
