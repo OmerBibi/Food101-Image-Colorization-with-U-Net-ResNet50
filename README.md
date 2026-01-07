@@ -131,19 +131,16 @@ Option A: install Git LFS (recommended):
 ```bash
 git lfs install
 ```
-- Then clone the repo as usual.
-
-Option B: download weights manually:
-
-If you already cloned without Git LFS, you can:
-
-- Go to the repository in your browser
-
-- Navigate to the weights files (`*.pt`)
-
-- Download them manually and place them in the correct folders
-
+- Then clone the repo as usual. Then:
+```bash
+git lfs pull
+```
 If the weights files look very small (a few KB), Git LFS is not set up correctly.
+
+Option B: download weights manually through your browser.
+
+We recommend using `artifacts/food101_step10_sigma5_T042/train_runs/long_run_45/checkpoints/lpips/best_ep039_lpips0.1575.pt`
+
 
 ### 🐍 2) Environment setup (recommended)
 ```bash
