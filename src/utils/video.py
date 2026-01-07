@@ -228,7 +228,7 @@ def frames_to_comparison_gif(
     # Load and combine frames side-by-side
     combined_frames = []
     for gray_path, color_path in zip(gray_frame_paths, color_frame_paths):
-        gray_img = Image.open(gray_path).convert('RGB')
+        gray_img = Image.open(gray_path).convert('L').convert('RGB')
         color_img = Image.open(color_path).convert('RGB')
 
         # Ensure both images have the same height

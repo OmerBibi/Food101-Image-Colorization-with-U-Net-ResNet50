@@ -9,3 +9,11 @@ PyYAML>=6.0
 tqdm>=4.65.0
 lpips>=0.1.4
 pytorch-msssim>=0.2.1
+
+# notebooks / analysis
+ipykernel
+ipywidgets
+pandas
+
+# video processing
+opencv-python
