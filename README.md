@@ -14,7 +14,7 @@ Final project for the Technion's EE Deep Learning course (046217)
 
 # ⚠️ **Important**
 
-This repository uses **Git LFS** for model checkpoints and color bin files.
+This repository uses **Git LFS** for model checkpoints.
 If you skip Git LFS, inference will silently break.
 
  Install Git LFS: https://git-lfs.com  
