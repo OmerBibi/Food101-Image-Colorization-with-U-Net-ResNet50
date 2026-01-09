@@ -16,6 +16,9 @@ setup(
         "matplotlib>=3.7.0",
         "PyYAML>=6.0",
         "tqdm>=4.65.0",
+        "lpips>=0.1.4",
+        "pytorch-msssim>=0.2.1",
+        "opencv-python",
     ],
     python_requires=">=3.8",
 )

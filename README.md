@@ -18,6 +18,10 @@ This repository uses **Git LFS** for model checkpoints.
 If you skip Git LFS, inference will silently break.
 
  Install Git LFS: https://git-lfs.com  
+ Then, initialize it:
+  ```bash
+  git lfs install
+  ```
 
 ## 📑 Table of Contents
 
@@ -196,7 +200,7 @@ If you don't have Git LFS installed, the weights will not be downloaded correctl
 
 Option A: install Git LFS (recommended), then clone the repo as usual.
 
-If the weights files look very small (a few KB), try running 
+If the weights files look very small (a few KB), try running:
 ```bash
 git lfs pull
 ```
@@ -215,7 +219,7 @@ conda activate foodcolor
 
 ### 📦 3) Install dependencies
 ```bash
-pip install -e .
+pip install -r requirements.txt
 ```
 ⚠️ Notes:
 * For GPU training, install a CUDA-enabled PyTorch build matching your CUDA version.
@@ -289,11 +293,17 @@ training:
 ```
 
 ### 🎨 7) Inference and visualization
+
+* If you haven't trained the netwrok and just want to use inference, first run `scripts/preprocess_dataset.py` to download dataset and and make sure centers and weights files exist.
+
 Use `visualization.ipynb`
 
 🎛️Important inference parameter:
-
-`ANNEAL_T = 0.42`
+ In .yaml file, 
+```yaml
+inference:
+  temperature_default: 0.42
+```
 Lower values give sharper colors but may introduce artifacts.
 
 ### 🛠️ 8) Customization
