@@ -114,10 +114,15 @@ This step is essential for avoiding color collapse and achieving visually pleasi
 
 ## 📈 Training Summary
 
-Training converges smoothly with stable optimization. While validation loss increases at later epochs, perceptual quality (LPIPS) and image fidelity (SSIM, PSNR) continue to improve and stabilize. We therefore use the epoch 39 checkpoint, which provides the best visual and perceptual results in practice. Full 45-epochs training took ~ 8.5 hours on RTX 3090
+Training converges smoothly with stable optimization. While validation loss increases at later epochs, perceptual quality (LPIPS) and image fidelity (SSIM, PSNR) continue to improve and stabilize. We therefore use the epoch 39 checkpoint, which provides the best visual and perceptual results in practice. Full 45 epochs training took ~ 8.5 hours on RTX 3090
 
 <p align="center">
   <img src="artifacts/food101_step10_sigma5_T042/train_runs/long_run_45/training_curves.png" alt="Colorized Food Commercial" width="600" />
+</p>
+
+We got the following results on the test set:
+<p align="center">
+  <img src="outputs/reconstruction_benchmarks_final.png" alt="Colorized Food Commercial" width="600" />
 </p>
 
 ---
