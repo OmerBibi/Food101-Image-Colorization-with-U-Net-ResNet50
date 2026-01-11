@@ -151,7 +151,7 @@ Core implementation of the colorization pipeline.
 
 * **`data/`** – Dataset handling and preprocessing  
   * `datasets.py` – Food-101 colorization dataset with soft-encoding of ab bins  
-  * `transforms.py` – Custom image transforms (Lab conversion, resizing, normalization)  
+  * `transforms.py` – Custom image transforms (Lab conversion, resizing)  
   * `loaders.py` – DataLoader construction and train/val splits  
 
 * **`models/`** – Model architectures and losses  
@@ -161,7 +161,7 @@ Core implementation of the colorization pipeline.
 
 * **`training/`** – Training infrastructure  
   * `trainer.py` – Training and validation loops  
-  * `checkpoint.py` – Checkpoint save / load logic  
+  * `checkpoint.py` – Checkpoint saving
   * `logger.py` – Metric and progress logging utilities  
 
 * **`utils/`** – Shared utilities  
