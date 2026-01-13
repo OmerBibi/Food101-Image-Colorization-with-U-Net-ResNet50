@@ -32,8 +32,9 @@ If you skip Git LFS, inference will silently break.
 - [🖼️ Results Gallery](#️-results-gallery)
 - [📂 Repository Contents](#-repository-contents)
 - [💻 Setup & Usage](#-setup--usage)
----
 
+---
+https://github.com/OmerBibi/Food101-Image-Colorization-with-U-Net-ResNet50/edit/main/README.md#
 ## 📖 Introduction
 This project implements a colorization pipeline using a **U-Net** architecture with a **ResNet-50** backbone, trained on the **Food-101** dataset. By leveraging the CIELAB color space, the model learns to predict the $a$ and $b$ (color) channels given the $L$ (luminance) channel.
 
@@ -50,11 +51,12 @@ To prevent the model from producing only dull or "brownish" images (a common iss
 <img width="1200" alt="color_bins_weights_and_cie_diagram" src="outputs/color_bins_weights_and_cie_diagram.png" />
 
 What this visualization shows:
-Color Bins (Left): This shows the 259 bins we found by applying K-means on the Food101 dataset. Notice the huge cluster in the center - these are the common browns, grays, and whites found in most food.
 
-Rebalancing Weights (Middle): This plot shows the "boost" we give to different colors. Rare colors (such as bright blues and greens) are assigned much higher weights (represented by bright yellow dots) to ensure the model doesn't overlook them.
+- Color Bins (Left): This shows the 259 bins we found by applying K-means on the Food101 dataset. Notice the huge cluster in the center - these are the common browns, grays, and whites found in most food.
 
-CIE Chromaticity (Right): This maps our weights onto the full range of human vision. It proves that the highest training priority is given to vibrant, "spectral" colors at the edges, while common neutral tones are given lower priority.
+- Rebalancing Weights (Middle): This plot shows the "boost" we give to different colors. Rare colors (such as bright blues and greens) are assigned much higher weights (represented by bright yellow dots) to ensure the model doesn't overlook them.
+
+- CIE Chromaticity (Right): This maps our weights onto the full range of human vision. It proves that the highest training priority is given to vibrant, "spectral" colors at the edges, while common neutral tones are given lower priority.
 
 ---
 
