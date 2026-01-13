@@ -26,12 +26,12 @@ If you skip Git LFS, inference will silently break.
 ## 📑 Table of Contents
 
 - [📖 Introduction](#-introduction)
+- [🎨 Color Distribution & Class Rebalancing](#️-color-distribution--class-rebalancing)
 - [🛠️ Model Architecture & Methodology](#️-model-architecture--methodology)
 - [📈 Training Summary](#-training-summary)
 - [🖼️ Results Gallery](#️-results-gallery)
 - [📂 Repository Contents](#-repository-contents)
 - [💻 Setup & Usage](#-setup--usage)
-
 ---
 
 ## 📖 Introduction
@@ -41,6 +41,20 @@ This project implements a colorization pipeline using a **U-Net** architecture w
 * **High-Fidelity Colorization**: Uses annealed mean decoding ($T=0.42$) for vibrant results.
 * **Video Capability**: Successfully processes video sequences frame-by-frame.
 * **Smart Architecture**: Combines pre-trained ResNet-50 features with U-Net skip connections.
+
+---
+## 🎨 Color Distribution & Class Rebalancing
+
+To prevent the model from producing only dull or "brownish" images (a common issue called "color collapse"), we use a custom weighting strategy during training.
+
+<img width="1200" alt="color_bins_weights_and_cie_diagram" src="outputs/color_bins_weights_and_cie_diagram.png" />
+
+What this visualization shows:
+Color Bins (Left): This shows the 259 bins we found by applying K-means on the Food101 dataset. Notice the huge cluster in the center - these are the common browns, grays, and whites found in most food.
+
+Rebalancing Weights (Middle): This plot shows the "boost" we give to different colors. Rare colors (such as bright blues and greens) are assigned much higher weights (represented by bright yellow dots) to ensure the model doesn't overlook them.
+
+CIE Chromaticity (Right): This maps our weights onto the full range of human vision. It proves that the highest training priority is given to vibrant, "spectral" colors at the edges, while common neutral tones are given lower priority.
 
 ---
 
