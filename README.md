@@ -34,7 +34,7 @@ If you skip Git LFS, inference will silently break.
 - [💻 Setup & Usage](#-setup--usage)
 
 ---
-https://github.com/OmerBibi/Food101-Image-Colorization-with-U-Net-ResNet50/edit/main/README.md#
+
 ## 📖 Introduction
 This project implements a colorization pipeline using a **U-Net** architecture with a **ResNet-50** backbone, trained on the **Food-101** dataset. By leveraging the CIELAB color space, the model learns to predict the $a$ and $b$ (color) channels given the $L$ (luminance) channel.
 
