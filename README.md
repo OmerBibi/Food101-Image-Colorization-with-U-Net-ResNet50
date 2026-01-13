@@ -26,7 +26,7 @@ If you skip Git LFS, inference will silently break.
 ## 📑 Table of Contents
 
 - [📖 Introduction](#-introduction)
-- [🎨 Color Distribution & Class Rebalancing](#️-color-distribution--class-rebalancing)
+- [🎨 Color Distribution & Class Rebalancing](#-color-distribution--class-rebalancing)
 - [🛠️ Model Architecture & Methodology](#️-model-architecture--methodology)
 - [📈 Training Summary](#-training-summary)
 - [🖼️ Results Gallery](#️-results-gallery)
