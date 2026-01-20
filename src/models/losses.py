@@ -1,6 +1,5 @@
 """Loss functions for colorization.
 
-Extracted from training_and_eval_v2.py lines 209-215.
 """
 
 import torch
